@@ -1,6 +1,5 @@
 // import "/src/css/reset.css";
 // import "/src/css/style.css";
+import { gameBoard } from "./gameboard";
 
-export default function addOneToX(x) {
-  return x + 1;
-}
+console.log("test");
