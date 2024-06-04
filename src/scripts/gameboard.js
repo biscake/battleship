@@ -14,9 +14,15 @@ class gameBoard {
   constructor() {
     this.grids = initGrid();
     this.sunkShips = 0;
+    this.ships = [];
+    this.maxShips = 5;
   }
 
   placeShip(shipType, startGrid, isVertical = 0) {
+    if (this.ships.includes(shipType)) {
+      return new Error(`Already placed a ${shipType.name}`);
+    }
+    this.ships.push(shipType);
     const ship = new shipType();
     const arr = [...startGrid];
     const start = [alphaToNum(arr[0]), parseInt(arr[1])];

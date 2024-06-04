@@ -40,6 +40,11 @@ test("Check if able to place ship correctly", () => {
   expect(board.grids["E7"].ship instanceof Submarine).toBe(true);
 });
 
+test("Check if placing two ships of same type returns error", () => {
+  board.placeShip(Carrier, "B3");
+  expect(board.placeShip(Carrier, "D3") instanceof Error).toBe(true);
+});
+
 test("Check if ships overlap return error", () => {
   board.placeShip(Carrier, "B3");
   expect(board.placeShip(Submarine, "A4", 1) instanceof Error).toBe(true);
