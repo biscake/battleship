@@ -9,7 +9,6 @@
 class Ships {
   constructor(name) {
     this.name = name;
-    this.destroyed = false;
     this.hits = 0;
     this.length = 0;
   }

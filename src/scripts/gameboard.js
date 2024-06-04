@@ -1,4 +1,4 @@
-import { Carrier } from "./ships";
+import { Carrier, isSunk } from "./ships";
 
 const gridAlphabets = ["A", "B", "C", "D", "E", "F", "G", "H ", "I", "J"];
 
@@ -13,6 +13,7 @@ function numToAlpha(idx) {
 class gameBoard {
   constructor() {
     this.grids = initGrid();
+    this.sunkShips = 0;
   }
 
   placeShip(shipType, startGrid, isVertical = 0) {
@@ -20,7 +21,6 @@ class gameBoard {
     const arr = [...startGrid];
     const start = [alphaToNum(arr[0]), parseInt(arr[1])];
     let tmp = start.slice();
-    // console.log(start);
     let min = 0;
     let max = 10 - ship.length + 1;
     let selectRowOrCol;
@@ -43,6 +43,23 @@ class gameBoard {
     }
     while (q.length) {
       this.grids[q.shift()].ship = ship;
+    }
+  }
+
+  receiveAttack(grid) {
+    if (!this.grids[grid].peg) {
+      this.grids[grid].peg = true;
+    } else {
+      return new Error("Already pegged");
+    }
+    if (this.grids[grid].ship) {
+      this.grids[grid].ship.hit();
+      if (isSunk(this.grids[grid].ship)) {
+        this.sunkShips += 1;
+      }
+      return 1;
+    } else {
+      return 0;
     }
   }
 }

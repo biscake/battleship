@@ -1,5 +1,5 @@
 import { gameBoard } from "../gameboard";
-import { Carrier, Submarine } from "../ships";
+import { Carrier, Destroyer, Submarine } from "../ships";
 
 const gridAlphabets = ["A", "B", "C", "D", "E", "F", "G", "H ", "I", "J"];
 
@@ -43,4 +43,24 @@ test("Check if able to place ship correctly", () => {
 test("Check if ships overlap return error", () => {
   board.placeShip(Carrier, "B3");
   expect(board.placeShip(Submarine, "A4", 1) instanceof Error).toBe(true);
+});
+
+test("Check if board received attack", () => {
+  board.receiveAttack("B3");
+  expect(board.grids.B3.peg).toBe(true);
+});
+
+test("Check if ship received hit", () => {
+  board.placeShip(Carrier, "B3");
+  board.receiveAttack("B3");
+  expect(board.grids.B3.ship.hits).toBe(1);
+  board.receiveAttack("B4");
+  expect(board.grids.B4.ship.hits).toBe(2);
+});
+
+test("Check if gameboard tracks sunk ship", () => {
+  board.placeShip(Destroyer, "B3");
+  board.receiveAttack("B3");
+  board.receiveAttack("B4");
+  expect(board.sunkShips).toBe(1);
 });
