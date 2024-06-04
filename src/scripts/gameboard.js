@@ -15,20 +15,34 @@ class gameBoard {
     this.grids = initGrid();
   }
 
-  placeShip(shipType, startGrid) {
+  placeShip(shipType, startGrid, isVertical = 0) {
     const ship = new shipType();
-    const start = [...startGrid];
-    let isHorizontal = true;
-    if (isHorizontal) {
+    const arr = [...startGrid];
+    const start = [alphaToNum(arr[0]), parseInt(arr[1])];
+    let tmp = start.slice();
+    // console.log(start);
+    let min = 0;
+    let max = 10 - ship.length + 1;
+    let selectRowOrCol;
+    let q = [];
+    if (isVertical) {
+      selectRowOrCol = 0;
+    } else {
+      selectRowOrCol = 1;
+    }
+    if (start[selectRowOrCol] >= min && start[selectRowOrCol] <= max) {
       for (let length = 0; length < ship.length; length++) {
-        let grid = [];
-        grid[0] = start[0];
-        grid[1] = parseInt(start[1]) + length;
-        console.log(grid);
-        // console.log(this.grids[grid]);
-        this.grids[grid.join("")].ship = ship;
-        console.log(this.grids[grid.join("")]);
+        let grid = gridAlphabets[tmp[0]] + tmp[1].toString();
+        if (!this.grids[grid].ship) {
+          q.push(grid);
+          tmp[selectRowOrCol] = tmp[selectRowOrCol] + 1;
+        } else {
+          return new Error("Overlapping of ships");
+        }
       }
+    }
+    while (q.length) {
+      this.grids[q.shift()].ship = ship;
     }
   }
 }
@@ -52,8 +66,5 @@ const initGrid = () => {
 
   return grids;
 };
-
-const a = new gameBoard();
-a.placeShip(Carrier, "B3");
 
 export { gameBoard };
