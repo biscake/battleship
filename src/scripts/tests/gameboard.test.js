@@ -1,7 +1,7 @@
 import { gameBoard } from "../gameboard";
 import { Carrier, Destroyer, Submarine } from "../ships";
 
-const gridAlphabets = ["A", "B", "C", "D", "E", "F", "G", "H ", "I", "J"];
+const gridAlphabets = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"];
 
 function alphaToNum(alpha) {
   return gridAlphabets.findIndex((element) => element === alpha);
@@ -17,7 +17,7 @@ beforeEach(() => {
   createBoard();
 });
 
-test("Check if baord is created correctly", () => {
+test("Check if board is created correctly", () => {
   for (let i = 0; i < 10; i++) {
     let x = gridAlphabets[i];
     for (let j = 0; j < 10; j++) {
@@ -49,6 +49,14 @@ test("Check if placing two ships of same type returns error", () => {
 test("Check if ships overlap return error", () => {
   board.placeShip(Carrier, "B3");
   expect(board.placeShip(Submarine, "A4", 1) instanceof Error).toBe(true);
+});
+
+test("Check if ships placed out of bounds horizontally return error", () => {
+  expect(board.placeShip(Carrier, "B8", 0) instanceof Error).toBe(true);
+});
+
+test("Check if ships placed out of bound vertically return error", () => {
+  expect(board.placeShip(Carrier, "J8", 1) instanceof Error).toBe(true);
 });
 
 test("Check if board received attack", () => {

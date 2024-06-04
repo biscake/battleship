@@ -1,4 +1,11 @@
-import { isSunk } from "./ships";
+import {
+  Battleship,
+  Carrier,
+  Cruiser,
+  Destroyer,
+  Submarine,
+  isSunk,
+} from "./ships";
 
 const gridAlphabets = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"];
 
@@ -18,19 +25,22 @@ class gameBoard {
     this.maxShips = 5;
   }
 
-  placeShip(shipType, startGrid, isVertical = 0) {
+  placeShip(shipType, startGrid, isVertical) {
     if (this.ships.includes(shipType)) {
-      return new Error(`Already placed a ${shipType.name}`);
+      throw new Error(`Already placed a ${shipType.name}`);
+      // return 0;
     }
     this.ships.push(shipType);
     const ship = new shipType();
     const arr = [...startGrid];
     const start = [alphaToNum(arr[0]), parseInt(arr[1])];
-    let tmp = start.slice();
+    let tmp = [alphaToNum(arr[0]), parseInt(arr[1])];
     let min = 0;
     let max = 10 - ship.length + 1;
     let selectRowOrCol;
     let q = [];
+    // 1 is vertical, 0 is horizontal
+    // alpha is Y, num is X
     if (isVertical) {
       selectRowOrCol = 0;
     } else {
@@ -43,13 +53,16 @@ class gameBoard {
           q.push(grid);
           tmp[selectRowOrCol] = tmp[selectRowOrCol] + 1;
         } else {
-          return new Error("Overlapping of ships");
+          throw new Error("Overlapping of ships");
         }
       }
+    } else {
+      throw new Error("Out of bounds");
     }
     while (q.length) {
       this.grids[q.shift()].ship = ship;
     }
+    return true;
   }
 
   receiveAttack(grid) {
@@ -68,6 +81,39 @@ class gameBoard {
       return 0;
     }
   }
+
+  placeShipRandomly(
+    shipTypes = [Carrier, Battleship, Cruiser, Submarine, Destroyer],
+  ) {
+    console.log("ran");
+    if (!shipTypes.length) {
+      return null;
+    }
+    try {
+      this.placeShip(
+        shipTypes[0],
+        generateRandomGrid(),
+        generateRandomOrientation(),
+      );
+      console.log("no error");
+      shipTypes.shift();
+      console.log("shifted");
+    } catch {
+      console.log("caugh error");
+      this.placeShipRandomly(shipTypes);
+    }
+  }
+}
+
+function generateRandomGrid() {
+  const randomX = Math.floor(Math.random() * 10) + 1;
+  const randomY =
+    gridAlphabets[Math.floor(Math.random() * gridAlphabets.length)];
+  const grid = randomY + randomX.toString();
+  return grid;
+}
+function generateRandomOrientation() {
+  return Math.floor(Math.random() * 2);
 }
 
 class grid {
@@ -97,4 +143,4 @@ class Player {
   }
 }
 
-export { gameBoard, Player };
+export { Player, gameBoard };
