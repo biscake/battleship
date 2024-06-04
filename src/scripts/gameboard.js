@@ -1,6 +1,6 @@
-import { Carrier, isSunk } from "./ships";
+import { isSunk } from "./ships";
 
-const gridAlphabets = ["A", "B", "C", "D", "E", "F", "G", "H ", "I", "J"];
+const gridAlphabets = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"];
 
 function alphaToNum(alpha) {
   return gridAlphabets.findIndex((element) => element === alpha);
@@ -90,4 +90,11 @@ const initGrid = () => {
   return grids;
 };
 
-export { gameBoard };
+class Player {
+  constructor(name) {
+    this.name = name;
+    this.board = new gameBoard();
+  }
+}
+
+export { gameBoard, Player };

@@ -1,5 +1,4 @@
-// import "/src/css/reset.css";
-// import "/src/css/style.css";
-import { gameBoard } from "./gameboard";
+import "/src/css/reset.css";
+import "/src/css/style.css";
 
-console.log("test");
+import "./screenController";

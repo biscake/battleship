@@ -38,6 +38,7 @@ test("Check if able to place ship correctly", () => {
   expect(board.grids["C7"].ship instanceof Submarine).toBe(true);
   expect(board.grids["D7"].ship instanceof Submarine).toBe(true);
   expect(board.grids["E7"].ship instanceof Submarine).toBe(true);
+  expect(board.grids["F7"].ship instanceof Submarine).toBe(false);
 });
 
 test("Check if placing two ships of same type returns error", () => {
