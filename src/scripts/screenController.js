@@ -10,6 +10,12 @@ import {
 
 const playerOneDisplay = document.querySelector("#player-one");
 const playerTwoDisplay = document.querySelector("#player-two");
+const currentPlayerDisplay = document.querySelector(".current-player");
+
+const players = [new Player("p2"), new Player("p2")];
+const [player1, player2] = players;
+
+// let currentPlayer = players[randomPlayer()];
 
 function initBoardDisplay() {
   const fillerBoard = new gameBoard();
@@ -22,8 +28,8 @@ function initBoardDisplay() {
   });
 }
 
-function refreshBoardDisplay(player1, player2) {
-  let q = [player1, player2];
+function refreshBoardDisplay(players) {
+  let q = [...players];
   let q2 = [playerOneDisplay, playerTwoDisplay];
   while (q.length) {
     const current = q.shift();
@@ -31,7 +37,7 @@ function refreshBoardDisplay(player1, player2) {
     Object.keys(current.board.grids).forEach((grid) => {
       const gridDisplay = currentPlayerDisplay.querySelector(`#${grid}`);
       const currentGrid = current.board.grids[grid];
-      // console.log(current.name, grid, currentGrid);
+      console.log(current.name, grid, currentGrid);
       if (currentGrid.ship) {
         gridDisplay.style.backgroundColor = "pink";
       }
@@ -56,13 +62,10 @@ function startGame() {
   });
 }
 
-const player1 = new Player("p1");
-const player2 = new Player("p2");
-
 initBoardDisplay();
 // player1.board.placeShip(Carrier, "B3");
 // player1.board.grids.B3.peg = true;
 
 player2.board.placeShipRandomly();
-
-refreshBoardDisplay(player1, player2);
+player2.board.receiveAttack("B4");
+refreshBoardDisplay(players);
