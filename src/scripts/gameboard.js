@@ -28,9 +28,7 @@ class gameBoard {
   placeShip(shipType, startGrid, isVertical) {
     if (this.ships.includes(shipType)) {
       throw new Error(`Already placed a ${shipType.name}`);
-      // return 0;
     }
-    this.ships.push(shipType);
     const ship = new shipType();
     const arr = [...startGrid];
     const start = [alphaToNum(arr[0]), parseInt(arr[1])];
@@ -62,6 +60,7 @@ class gameBoard {
     while (q.length) {
       this.grids[q.shift()].ship = ship;
     }
+    this.ships.push(shipType);
     return true;
   }
 
@@ -82,25 +81,19 @@ class gameBoard {
     }
   }
 
-  placeShipRandomly(
-    shipTypes = [Carrier, Battleship, Cruiser, Submarine, Destroyer],
-  ) {
-    console.log("ran");
-    if (!shipTypes.length) {
-      return null;
-    }
-    try {
-      this.placeShip(
-        shipTypes[0],
-        generateRandomGrid(),
-        generateRandomOrientation(),
-      );
-      console.log("no error");
-      shipTypes.shift();
-      console.log("shifted");
-    } catch {
-      console.log("caugh error");
-      this.placeShipRandomly(shipTypes);
+  placeShipRandomly() {
+    let shipTypes = [Carrier, Battleship, Cruiser, Submarine, Destroyer];
+    let randomGrid = generateRandomGrid();
+    let randomOrientation = generateRandomGrid();
+    while (true) {
+      try {
+        this.placeShip(shipTypes[0], randomGrid, randomOrientation);
+        shipTypes.shift();
+      } catch {
+        randomGrid = generateRandomGrid();
+        randomOrientation = generateRandomOrientation();
+      }
+      if (!shipTypes.length) break;
     }
   }
 }
